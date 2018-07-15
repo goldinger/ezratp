@@ -1,5 +1,4 @@
 from datetime import datetime
-
 import requests
 import xmltodict
 from flask import Flask, jsonify, request
