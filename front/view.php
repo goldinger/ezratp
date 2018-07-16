@@ -9,11 +9,11 @@
 <p>Stations d'alesia</p>
 
 <?php
-foreach ($stations as $station)
+foreach ($minutes as $minute)
 {
 ?>
         <h3>
-            <?php echo htmlspecialchars($station->name); ?>
+            <?php echo $minute; ?>
         </h3>
 <?php
 }
