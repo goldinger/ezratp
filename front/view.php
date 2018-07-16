@@ -13,7 +13,7 @@ foreach ($stations as $station)
 {
 ?>
         <h3>
-            <?php echo htmlspecialchars($station['name']); ?>
+            <?php echo htmlspecialchars($station->name); ?>
         </h3>
 <?php
 }
