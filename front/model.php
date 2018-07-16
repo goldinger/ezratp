@@ -9,8 +9,7 @@ function getStationsByName($stationName)
 
 function getNextMissions($lineId, $stationId, $sens)
 {
-    $response = file_get_contents("https://ezratp.sghir.me/api/nextMissions?lineId=' . $lineId . '&stationId=" . $stationId . '&sens=' . $sens);
-    echo $response;
+    $response = file_get_contents("https://ezratp.sghir.me/api/arduino/nextMissions?lineId=" . $lineId . "&stationId=" . $stationId . "&sens=" . $sens);
     $response = json_decode($response);
     return $response;
 }
