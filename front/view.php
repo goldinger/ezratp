@@ -7,7 +7,7 @@
 <body>
 <h1>Easy Ratp</h1>
 <p>Stations d'alesia</p>
-<?php echo $stations; ?>
+
 <?php
 foreach ($stations as $station)
 {
