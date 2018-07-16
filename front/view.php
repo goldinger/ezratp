@@ -12,8 +12,8 @@
 foreach ($stations as $station)
 {
 ?>
-        <p><?php echo $station->id; ?> - <?php echo $station->name; ?> <?php echo $station->line->reseau->name; ?>
-            <br><?php echo $station->line->id?> - <?php echo $station->line->code; ?>
+        <p><?php echo $station->id; ?> - <?php echo $station->name; ?>
+            <br><?php echo $station->line->id?> - <?php echo $station->line->reseau->name; ?> <?php echo $station->line->code; ?>
         </p>
 <?php
 }
