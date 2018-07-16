@@ -7,7 +7,7 @@
 <body>
 <h1>Easy Ratp</h1>
 <p>Stations d'alesia</p>
-<form action="/action_page.php">
+<form action="index.php">
     <select name="stations" size="10">
 <?php
 foreach ($stations as $station)
