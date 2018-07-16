@@ -12,12 +12,9 @@
 foreach ($stations as $station)
 {
 ?>
-        <div>
-            <p><?php echo $station->id; ?></p>
-            <p><?php echo $station->name; ?></p>
-            <p><?php echo $station->line->reseau->name; ?> <?php echo $station->line->code; ?></p>
-            <br />
-        </div>
+        <p><?php echo $station->id; ?> - <?php echo $station->name; ?> <?php echo $station->line->reseau->name; ?>
+            <br><?php echo $station->line->id?> - <?php echo $station->line->code; ?>
+        </p>
 <?php
 }
 ?>
