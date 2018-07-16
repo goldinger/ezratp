@@ -9,12 +9,15 @@
 <p>Stations d'alesia</p>
 
 <?php
-foreach ($minutes as $minute)
+foreach ($stations as $station)
 {
 ?>
-        <h3>
-            <?php echo $minute; ?>
-        </h3>
+        <div>
+            <p><?php echo $station->id; ?></p>
+            <p><?php echo $station->name; ?></p>
+            <p><?php echo $station->line->reseau->name; ?> <?php echo $station->line->code; ?></p>
+            <br />
+        </div>
 <?php
 }
 ?>
