@@ -14,7 +14,7 @@
         foreach ($directions as $direction)
         {
             ?>
-            <option value="<?php echo $station->id; ?>,,<?php echo $station->name; ?>,,<?php echo $station->line->id; ?>,,<?php echo $station->line->reseau->name; ?> <?php echo $station->line->code; ?>,,<?php echo $direction->sens; ?>">
+            <option value="<?php echo $stationId; ?>,,<?php echo $stationName; ?>,,<?php echo $lineId; ?>,,<?php echo $lineName; ?>,,<?php echo $direction->sens; ?>">
                 <?php echo $direction->name; ?>
             </option>
             <?php
