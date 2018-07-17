@@ -7,7 +7,7 @@
 <body>
 <h1>Easy Ratp</h1>
 <p>Station : <?php echo $stationName; ?></p>
-<form action="directions_controler.php">
+<form action="directions.php">
     <select name="stationData" size="10">
 <?php
 foreach ($stations as $station)

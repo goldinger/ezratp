@@ -9,6 +9,7 @@
 <form action="/stations_controler.php">
     Station :<br>
     <input type="text" name="data">
+    <input type="submit">
 </form>
 </body>
 </html>
