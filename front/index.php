@@ -1,7 +1,14 @@
-<?php
-require('model.php');
-
-$stations = getStationsByName('Alesia');
-//$minutes = getNextMissions('77','1913-2238', 'A');
-
-require('view.php');
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>ezratp</title>
+</head>
+<body>
+<h1>Easy Ratp</h1>
+<form action="/stations_controler.php">
+    Station :<br>
+    <input type="text" name="data">
+</form>
+</body>
+</html>
