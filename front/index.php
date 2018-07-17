@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Easy Ratp</h1>
-<form action="/stations_controler.php">
+<form action="/stations.php">
     Station :<br>
     <input type="text" name="data">
     <input type="submit">
