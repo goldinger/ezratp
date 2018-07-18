@@ -7,6 +7,15 @@ app = Flask(__name__)
 
 url = 'http://opendata-tr.ratp.fr/wsiv/services/Wsiv'
 
+line_id_transco = {
+    'metro': 'M',
+    'rer': 'R',
+    'sncf': None,
+    'noctilienratp': 'BN',
+    'busratp': 'B',
+    'tram': 'BT'
+}
+
 
 def get_displayable_line(raw_line):
     return {
@@ -65,7 +74,7 @@ def get_next_missions():
         'content-type': 'text/xml',
         'SOAPAction': "urn:getMissionsNext"
     }
-    station_id = request.args.get('stationId')
+    station_name = request.args.get('stationName')
     line_id = request.args.get('lineId')
     sens = request.args.get('sens')
     body = """
@@ -74,10 +83,10 @@ def get_next_missions():
         <soapenv:Body>
             <wsiv:getMissionsNext>
                 <wsiv:station>
-                    <xsd:id>""" + station_id + """</xsd:id>
                     <xsd:line>
                         <xsd:id>""" + line_id + """</xsd:id>
                     </xsd:line>
+                    <xsd:name>""" + station_name + """</xsd:name>
                 </wsiv:station>
                 <wsiv:direction>
                     <xsd:sens>""" + sens + """</xsd:sens>
@@ -88,13 +97,13 @@ def get_next_missions():
     """
     response = requests.post(url, data=body, headers=headers)
     response = xmltodict.parse(response.content)
+    print(response)
     response = response.get('soapenv:Envelope').get('soapenv:Body').get('ns2:getMissionsNextResponse').get('ns2:return')
     return jsonify(response)
 
 
 def get_remaining_time(mission):
     station_message = mission.get('stationsMessages')
-    print(station_message.get('xsi:nil'))
     if station_message is None or station_message.get('@xsi:nil') == '1':
         next_mission = datetime.strptime(mission.get('stationsDates')[0], '%Y%m%d%H%M')
         return next_mission.strftime('%H:%M')
@@ -111,7 +120,7 @@ def get_next_missions_ready_for_display():
         'content-type': 'text/xml',
         'SOAPAction': "urn:getMissionsNext"
     }
-    station_id = request.args.get('stationId')
+    station_name = request.args.get('stationName')
     line_id = request.args.get('lineId')
     sens = request.args.get('sens')
     body = """
@@ -120,10 +129,10 @@ def get_next_missions_ready_for_display():
         <soapenv:Body>
             <wsiv:getMissionsNext>
                 <wsiv:station>
-                    <xsd:id>""" + station_id + """</xsd:id>
                     <xsd:line>
                         <xsd:id>""" + line_id + """</xsd:id>
                     </xsd:line>
+                    <xsd:name>""" + station_name + """</xsd:name>
                 </wsiv:station>
                 <wsiv:direction>
                     <xsd:sens>""" + sens + """</xsd:sens>
@@ -202,6 +211,17 @@ def get_station_by_id(station_id):
             'ns2:return').get('stations')
         if type(response) is not list:
             response = [response]
+        new_response = []
+        for station in response:
+            station['line']['rawId'] = station.get('line').get('id')
+            new_id = line_id_transco.get(station.get('line').get('reseau').get('code'))
+            if station.get('line').get('reseau').get('code') == "tram":
+                new_id += station.get('line').get('code', '').lower()
+            else:
+                new_id += station.get('line').get('code', '').upper()
+            station['line']['id'] = new_id
+            new_response.append(station)
+        response = new_response
     else:
         body = """
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsiv="http://wsiv.ratp.fr" xmlns:xsd="http://wsiv.ratp.fr/xsd">
@@ -219,6 +239,7 @@ def get_station_by_id(station_id):
         response = xmltodict.parse(response.content)
         response = response.get('soapenv:Envelope').get('soapenv:Body').get('ns2:getStationsResponse').get(
             'ns2:return').get('stations')
+
     return jsonify(response)
 
 
