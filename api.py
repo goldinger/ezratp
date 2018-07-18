@@ -196,6 +196,12 @@ def get_station_by_id(station_id):
                </soapenv:Body>
             </soapenv:Envelope>
             """
+        response = requests.post(url, data=body, headers=headers)
+        response = xmltodict.parse(response.content)
+        response = response.get('soapenv:Envelope').get('soapenv:Body').get('ns2:getStationsResponse').get(
+            'ns2:return').get('stations')
+        if type(response) is not list:
+            response = [response]
     else:
         body = """
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsiv="http://wsiv.ratp.fr" xmlns:xsd="http://wsiv.ratp.fr/xsd">
@@ -209,9 +215,10 @@ def get_station_by_id(station_id):
            </soapenv:Body>
         </soapenv:Envelope>
         """
-    response = requests.post(url, data=body, headers=headers)
-    response = xmltodict.parse(response.content)
-    response = response.get('soapenv:Envelope').get('soapenv:Body').get('ns2:getStationsResponse').get('ns2:return').get('stations')
+        response = requests.post(url, data=body, headers=headers)
+        response = xmltodict.parse(response.content)
+        response = response.get('soapenv:Envelope').get('soapenv:Body').get('ns2:getStationsResponse').get(
+            'ns2:return').get('stations')
     return jsonify(response)
 
 
