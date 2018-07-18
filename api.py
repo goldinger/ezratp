@@ -104,14 +104,14 @@ def get_next_missions():
 
 def get_remaining_time(mission):
     station_message = mission.get('stationsMessages')
-    if station_message is None or station_message.get('@xsi:nil') == '1':
-        next_mission = datetime.strptime(mission.get('stationsDates')[0], '%Y%m%d%H%M')
-        return next_mission.strftime('%H:%M')
-        # return int((next_mission - datetime.now()).total_seconds() / 60.0)
+    if type(station_message) is str:
+        return station_message
     elif type(station_message) is list:
         return station_message[0]
     else:
-        return station_message
+        next_mission = datetime.strptime(mission.get('stationsDates')[0], '%Y%m%d%H%M')
+        return next_mission.strftime('%H:%M')
+        # return int((next_mission - datetime.now()).total_seconds() / 60.0)
 
 
 @app.route('/api/arduino/nextMissions')
