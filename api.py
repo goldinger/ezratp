@@ -215,12 +215,15 @@ def get_station_by_id(station_id):
         for station in response:
             station['line']['rawId'] = station.get('line').get('id')
             new_id = line_id_transco.get(station.get('line').get('reseau').get('code'))
-            if station.get('line').get('reseau').get('code') == "tram":
-                new_id += station.get('line').get('code', '').lower()
-            else:
-                new_id += station.get('line').get('code', '').upper()
-            station['line']['id'] = new_id
-            new_response.append(station)
+            try:
+                if station.get('line').get('reseau').get('code') == "tram":
+                    new_id += station.get('line').get('code', '').lower()
+                else:
+                    new_id += station.get('line').get('code', '').upper()
+                station['line']['id'] = new_id
+                new_response.append(station)
+            except Exception:
+                pass
         response = new_response
     else:
         body = """
