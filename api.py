@@ -93,12 +93,20 @@ def get_next_missions():
 
 
 def get_remaining_time(mission):
-    next_mission = datetime.strptime(mission.get('stationsDates')[0], '%Y%m%d%H%M')
-    return int((next_mission - datetime.now()).total_seconds() / 60.0)
+    station_message = mission.get('stationsMessages')
+    print(station_message.get('xsi:nil'))
+    if station_message is None or station_message.get('@xsi:nil') == '1':
+        next_mission = datetime.strptime(mission.get('stationsDates')[0], '%Y%m%d%H%M')
+        return next_mission.strftime('%H:%M')
+        # return int((next_mission - datetime.now()).total_seconds() / 60.0)
+    elif type(station_message) is list:
+        return station_message[0]
+    else:
+        return station_message
 
 
 @app.route('/api/arduino/nextMissions')
-def get_next_missions_arduino():
+def get_next_missions_ready_for_display():
     headers = {
         'content-type': 'text/xml',
         'SOAPAction': "urn:getMissionsNext"
@@ -129,7 +137,7 @@ def get_next_missions_arduino():
     response = response.get('soapenv:Envelope').get('soapenv:Body').get('ns2:getMissionsNextResponse').get('ns2:return')
     response = response.get('missions', [])
     response = [get_remaining_time(mission) for mission in response]
-    return jsonify(response)
+    return jsonify(sorted(response))
 
 
 @app.route('/api/directions/<string:line_id>')

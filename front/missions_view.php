@@ -12,7 +12,7 @@
         foreach ($missions as $mission)
         {
             ?>
-            <p>In <?php echo $mission ?> min</p>
+            <p><?php echo $mission ?></p>
             <?php
         }
         ?>
