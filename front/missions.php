@@ -7,6 +7,6 @@ $stationName = $data[1];
 $lineId = $data[2];
 $lineName = $data[3];
 $sens = $data[4];
-$missions = getNextMissions($lineId, $stationId, $sens);
+$missions = getNextMissions($lineId, $stationName, $sens);
 
 require('missions_view.php');

@@ -10,10 +10,10 @@ function getStationsByName($stationName)
     return $response;
 }
 
-function getNextMissions($lineId, $stationId, $sens)
+function getNextMissions($lineId, $stationName, $sens)
 {
     global $base_url;
-    $response = file_get_contents($base_url . "arduino/nextMissions?lineId=" . $lineId . "&stationId=" . $stationId . "&sens=" . $sens);
+    $response = file_get_contents($base_url . "arduino/nextMissions?lineId=" . $lineId . "&stationName=" . $stationName . "&sens=" . $sens);
     $response = json_decode($response);
     return $response;
 }
