@@ -217,13 +217,16 @@ def get_station_by_id(station_id):
             new_id = line_id_transco.get(station.get('line').get('reseau').get('code'))
             try:
                 if station.get('line').get('reseau').get('code') == "tram":
-                    new_id += station.get('line').get('code', '').lower()
+                    if station.get('line').get('reseau').get('code')[0].lower() == 't':
+                        new_id += station.get('line').get('code', '').lower()[1:]
+                    else:
+                        new_id += station.get('line').get('code', '').lower()
                 else:
                     new_id += station.get('line').get('code', '').upper()
                 station['line']['id'] = new_id
                 new_response.append(station)
             except Exception:
-                pass
+                return jsonify({'error': 'station id error'})
         response = new_response
     else:
         body = """
