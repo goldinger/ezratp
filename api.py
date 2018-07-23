@@ -104,10 +104,29 @@ def get_next_missions():
 
 def get_remaining_time(mission):
     station_message = mission.get('stationsMessages')
+    try:
+        next_mission = datetime.strptime(mission.get('stationsDates')[0], '%Y%m%d%H%M')
+    except Exception:
+        try:
+            next_mission = str(int(mission.get('stationDates')[0]))
+        except Exception:
+            next_mission = None
     if type(station_message) is str:
-        return station_message
+        try:
+            return str(int((next_mission - datetime.now()).total_seconds() / 60.0)) + ' | ' + station_message
+        except Exception:
+            try:
+                return next_mission + ' | ' + station_message
+            except Exception:
+                return station_message
     elif type(station_message) is list:
-        return station_message[0]
+        try:
+            return str(int((next_mission - datetime.now()).total_seconds() / 60.0)) + ' | ' + station_message[0]
+        except Exception:
+            try:
+                return next_mission + ' | ' + station_message[0]
+            except Exception:
+                return station_message[0]
     else:
         next_mission = datetime.strptime(mission.get('stationsDates')[0], '%Y%m%d%H%M')
         return next_mission.strftime('%H:%M')
@@ -252,4 +271,5 @@ def get_station_by_id(station_id):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    pass
+app.run(host='0.0.0.0')
