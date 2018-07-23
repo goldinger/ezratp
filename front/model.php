@@ -5,9 +5,7 @@ $base_url = "https://ezratp.sghir.me/api/";
 function getStationsByName($stationName)
 {
     global $base_url;
-    echo $base_url . "stations?stationName=" . $stationName;
     $response = file_get_contents($base_url . "stations?stationName=" . $stationName);
-    echo $response;
     $response = json_decode($response);
     return $response;
 }
