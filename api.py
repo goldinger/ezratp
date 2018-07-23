@@ -271,5 +271,4 @@ def get_station_by_id(station_id):
 
 
 if __name__ == "__main__":
-    pass
-app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0')
