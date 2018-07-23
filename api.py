@@ -219,6 +219,8 @@ def get_station_by_id(station_id):
                 if station.get('line').get('reseau').get('code') == "tram":
                     if station.get('line').get('reseau').get('code')[0].lower() == 't':
                         new_id += station.get('line').get('code', '').lower()[1:]
+                    elif station.get('line').get('reseau').get('code')[0].lower() == 'n':
+                        new_id += station.get('line').get('code', '').lower()[1:]
                     else:
                         new_id += station.get('line').get('code', '').lower()
                 else:
