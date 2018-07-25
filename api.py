@@ -104,6 +104,7 @@ def get_next_missions():
 
 def get_remaining_time(mission):
     station_message = mission.get('stationsMessages')
+
     try:
         next_mission = datetime.strptime(mission.get('stationsDates'), '%Y%m%d%H%M')
     except Exception:
@@ -111,6 +112,10 @@ def get_remaining_time(mission):
             next_mission = str(int(mission.get('stationDates')))
         except Exception:
             next_mission = None
+
+    if next_mission is not None:
+        return int((next_mission - datetime.now()).total_seconds() / 60.0)
+
     if type(station_message) is str:
         try:
             return str(int((next_mission - datetime.now()).total_seconds() / 60.0)) + ' | ' + station_message
