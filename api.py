@@ -250,9 +250,13 @@ def get_station_by_id(station_id):
                 else:
                     new_id += station.get('line').get('code', '').upper()
                 station['line']['id'] = new_id
+            except Exception as e:
+                print({
+                    'error': 'station id error',
+                    'message': str(e)
+                })
+            finally:
                 new_response.append(station)
-            except Exception:
-                return jsonify({'error': 'station id error'})
         response = new_response
     else:
         body = """
