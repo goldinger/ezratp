@@ -103,39 +103,17 @@ def get_next_missions():
 
 
 def get_remaining_time(mission):
-    station_message = mission.get('stationsMessages')
-
-    try:
-        next_mission = datetime.strptime(mission.get('stationsDates'), '%Y%m%d%H%M')
-    except Exception:
-        try:
-            next_mission = str(int(mission.get('stationDates')))
-        except Exception:
-            next_mission = None
-
-    if next_mission is not None:
+    station_dates = mission.get('stationsDates')
+    if station_dates is not None:
+        if type(station_dates) is list:
+            station_dates = [datetime.strptime(x, '%Y%m%d%H%M') for x in station_dates]
+            station_dates = list(sorted(station_dates))
+            next_mission = station_dates[0]
+        else:
+            next_mission = datetime.strptime(station_dates, '%Y%m%d%H%M')
         return int((next_mission - datetime.now()).total_seconds() / 60.0)
-
-    if type(station_message) is str:
-        try:
-            return str(int((next_mission - datetime.now()).total_seconds() / 60.0)) + ' | ' + station_message
-        except Exception:
-            try:
-                return next_mission + 'min | ' + station_message
-            except Exception:
-                return station_message
-    elif type(station_message) is list:
-        try:
-            return str(int((next_mission - datetime.now()).total_seconds() / 60.0)) + ' | ' + station_message[0]
-        except Exception:
-            try:
-                return next_mission + 'min | ' + station_message[0]
-            except Exception:
-                return station_message[0]
     else:
-        next_mission = datetime.strptime(mission.get('stationsDates')[0], '%Y%m%d%H%M')
-        return next_mission.strftime('%H:%M')
-        # return int((next_mission - datetime.now()).total_seconds() / 60.0)
+        return -1
 
 
 @app.route('/api/arduino/nextMissions')
