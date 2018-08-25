@@ -117,14 +117,18 @@ def get_remaining_time(mission):
 
 
 @app.route('/api/arduino/nextMissions')
-def get_next_missions_ready_for_display():
+def get_next_missions_for_arduino():
+    station_name = request.args.get('stationName')
+    line_id = request.args.get('lineId')
+    sens = request.args.get('sens')
+    return get_next_missions_ready_for_display(station_name, line_id, sens)
+
+
+def get_next_missions_ready_for_display(station_name, line_id, sens):
     headers = {
         'content-type': 'text/xml',
         'SOAPAction': "urn:getMissionsNext"
     }
-    station_name = request.args.get('stationName')
-    line_id = request.args.get('lineId')
-    sens = request.args.get('sens')
     body = """
     <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsiv="http://wsiv.ratp.fr" xmlns:xsd="http://wsiv.ratp.fr/xsd">
         <soapenv:Header/>
@@ -255,6 +259,16 @@ def get_station_by_id(station_id):
             'ns2:return').get('stations')
 
     return jsonify(response)
+
+
+@app.route('/api/arduino/customer/<string:customer_id>')
+def get_customer_data(customer_id):
+    if customer_id == 'aminesghir':
+        return get_next_missions_ready_for_display(
+            station_name='Herold - Mairie de Courbevoie',
+            line_id='B275',
+            sens='R'
+        )
 
 
 if __name__ == "__main__":
