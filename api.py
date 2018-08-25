@@ -121,7 +121,7 @@ def get_next_missions_for_arduino():
     station_name = request.args.get('stationName')
     line_id = request.args.get('lineId')
     sens = request.args.get('sens')
-    return get_next_missions_ready_for_display(station_name, line_id, sens)
+    return jsonify(get_next_missions_ready_for_display(station_name, line_id, sens))
 
 
 def get_next_missions_ready_for_display(station_name, line_id, sens):
@@ -152,7 +152,7 @@ def get_next_missions_ready_for_display(station_name, line_id, sens):
     response = response.get('soapenv:Envelope').get('soapenv:Body').get('ns2:getMissionsNextResponse').get('ns2:return')
     response = response.get('missions', [])
     response = [get_remaining_time(mission) for mission in response]
-    return jsonify(sorted(response))
+    return list(sorted(response))
 
 
 @app.route('/api/directions/<string:line_id>')
@@ -264,11 +264,17 @@ def get_station_by_id(station_id):
 @app.route('/api/arduino/customer/<string:customer_id>')
 def get_customer_data(customer_id):
     if customer_id == 'aminesghir':
-        return get_next_missions_ready_for_display(
+        list_275 = get_next_missions_ready_for_display(
             station_name='Herold - Mairie de Courbevoie',
             line_id='B275',
             sens='R'
         )
+        list_278 = get_next_missions_ready_for_display(
+            station_name='Herold - Mairie de Courbevoie',
+            line_id='B278',
+            sens='R'
+        )
+        return jsonify(sorted([x for x in list_275 + list_278 if x >= 0]))
 
 
 if __name__ == "__main__":
