@@ -11,7 +11,7 @@ line_id_transco = {
     'metro': 'M',
     'rer': 'R',
     'sncf': None,
-    'noctilienratp': 'BN',
+    'noctilienratp': 'B',
     'busratp': 'B',
     'tram': 'BT'
 }
