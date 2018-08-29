@@ -97,7 +97,6 @@ def get_next_missions():
     """
     response = requests.post(url, data=body, headers=headers)
     response = xmltodict.parse(response.content)
-    print(response)
     response = response.get('soapenv:Envelope').get('soapenv:Body').get('ns2:getMissionsNextResponse').get('ns2:return')
     return jsonify(response)
 
@@ -113,7 +112,7 @@ def get_remaining_time(mission):
             next_mission = datetime.strptime(station_dates, '%Y%m%d%H%M')
         return int((next_mission - datetime.now()).total_seconds() / 60.0)
     else:
-        return -1
+        return None
 
 
 @app.route('/api/arduino/nextMissions')
@@ -151,7 +150,7 @@ def get_next_missions_ready_for_display(station_name, line_id, sens):
     response = xmltodict.parse(response.content)
     response = response.get('soapenv:Envelope').get('soapenv:Body').get('ns2:getMissionsNextResponse').get('ns2:return')
     response = response.get('missions', [])
-    response = [get_remaining_time(mission) for mission in response]
+    response = [get_remaining_time(mission) for mission in response if get_remaining_time(mission) is not None]
     return list(sorted(response))
 
 
