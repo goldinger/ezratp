@@ -127,6 +127,7 @@ def get_remaining_time(mission):
                 day=datetime.today().day
             )
             return int((next_mission - datetime.now()).total_seconds() / 60.0)
+        return 0
     return None
 
 
@@ -164,6 +165,7 @@ def get_next_missions_ready_for_display(station_name, line_id, sens):
     response = requests.post(url, data=body, headers=headers)
     response = xmltodict.parse(response.content)
     response = response.get('soapenv:Envelope').get('soapenv:Body').get('ns2:getMissionsNextResponse').get('ns2:return')
+    print(response)
     response = response.get('missions', [])
     response = [int(get_remaining_time(mission)) for mission in response if get_remaining_time(mission) is not None]
     return list(sorted(response))
