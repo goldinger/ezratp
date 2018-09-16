@@ -110,9 +110,24 @@ def get_remaining_time(mission):
             next_mission = station_dates[0]
         else:
             next_mission = datetime.strptime(station_dates, '%Y%m%d%H%M')
-        return int((next_mission - datetime.now()).total_seconds() / 60.0)
-    else:
-        return None
+        response = int((next_mission - datetime.now()).total_seconds() / 60.0)
+        if response < 100:
+            return response
+
+    station_messages = mission.get('stationsMessages')
+    if station_messages is not None:
+        id = mission.get('direction', {}).get('line', {}).get('id', 'xxxxx')
+        if id[0] in ['B', 'M'] and len([c for c in station_messages if c.isdigit()]) > 0:
+            return int(''.join([c for c in station_messages if c.isdigit()]))
+        elif id[0] == 'R' and len([c for c in station_messages if c.isdigit()]) != 4:
+            next_mission = datetime.strptime(''.join([c for c in station_messages if c.isdigit()]), '%H%M')
+            next_mission = next_mission.replace(
+                year=datetime.today().year,
+                month=datetime.today().month,
+                day=datetime.today().day
+            )
+            return int((next_mission - datetime.now()).total_seconds() / 60.0)
+    return None
 
 
 @app.route('/api/arduino/nextMissions')
