@@ -165,7 +165,7 @@ def get_next_missions_ready_for_display(station_name, line_id, sens):
     response = xmltodict.parse(response.content)
     response = response.get('soapenv:Envelope').get('soapenv:Body').get('ns2:getMissionsNextResponse').get('ns2:return')
     response = response.get('missions', [])
-    response = [get_remaining_time(mission) for mission in response if get_remaining_time(mission) is not None]
+    response = [int(get_remaining_time(mission)) for mission in response if get_remaining_time(mission) is not None]
     return list(sorted(response))
 
 
@@ -288,7 +288,7 @@ def get_customer_data(customer_id):
             line_id='B278',
             sens='R'
         )
-        return jsonify(sorted([x for x in list_275 + list_278 if x >= 0]))
+        return jsonify(list(sorted(list_275 + list_278)))
 
 
 if __name__ == "__main__":
