@@ -1,7 +1,8 @@
+import os
 from datetime import datetime
 import requests
 import xmltodict
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file, abort
 
 app = Flask(__name__)
 
@@ -290,6 +291,21 @@ def get_customer_data(customer_id):
             sens='R'
         )
         return jsonify(list(sorted(list_275 + list_278)))
+
+
+@app.route('/api/image/<string:image_id>')
+def get_image(image_id):
+    if os.path.exists('images/' + image_id):
+        print('exists')
+        return send_file('images/' + image_id, mimetype='image/gif')
+    else:
+        response = requests.get('http://opendata-tr.ratp.fr/wsiv/static/line/' + image_id)
+        if response.status_code == 200:
+            with open('images/' + image_id, 'wb') as f:
+                f.write(response.content)
+            return send_file('images/' + image_id, mimetype='image/gif')
+        else:
+            abort(404)
 
 
 if __name__ == "__main__":
