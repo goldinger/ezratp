@@ -295,6 +295,7 @@ def get_customer_data(customer_id):
 
 @app.route('/api/image/<string:image_id>')
 def get_image(image_id):
+    os.makedirs('images', exist_ok=True)
     if os.path.exists('images/' + image_id):
         print('exists')
         return send_file('images/' + image_id, mimetype='image/gif')
