@@ -281,12 +281,12 @@ def get_station_by_id(station_id):
 def get_customer_data(customer_id):
     if customer_id == 'aminesghir':
         list_275 = get_next_missions_ready_for_display(
-            station_name='Herold - Mairie de Courbevoie',
+            station_name='Paix - Verdun',
             line_id='B275',
             sens='R'
         )
         list_278 = get_next_missions_ready_for_display(
-            station_name='Herold - Mairie de Courbevoie',
+            station_name='Paix - Verdun',
             line_id='B278',
             sens='R'
         )
